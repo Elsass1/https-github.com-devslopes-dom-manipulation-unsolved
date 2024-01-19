@@ -38,3 +38,38 @@
  */
 
 // Your code goes here...
+const cardsContainer = document.querySelector(".cardsContainer");
+
+const favorites = [];
+
+function redBackground(e) {
+  const item = e.target;
+  if (Array.from(item.classList).includes("card")) {
+    if (item.style.backgroundColor === "white") {
+      item.style.backgroundColor = "red";
+      favorites.push(item.id);
+    } else {
+      item.style.backgroundColor = "white";
+      const index = favorites.indexOf(item.id);
+      if (index > -1) {
+        favorites.splice(index, 1);
+      }
+    }
+    localStorage.setItem("favoriteCards", JSON.stringify(favorites));
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const storedFavorites = localStorage.getItem("favoriteCards");
+  const updatedData = JSON.parse(storedFavorites);
+  favorites.push(...updatedData);
+
+  updatedData.forEach((id) => {
+    const card = document.getElementById(id);
+    if (card) {
+      card.style.backgroundColor = "red";
+    }
+  });
+});
+
+cardsContainer.addEventListener("click", redBackground);
